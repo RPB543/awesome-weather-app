@@ -10,16 +10,16 @@
 <body>
     <header>Weather Dashboard</header>
     <div class="container">
-        <div class="app-title">
+        <div class="form">
             <p>Search for a City:</p>
-            <input id="search-box" type="text" placeholder="Enter the city name" autocomplete="off" />
-            <button>Submit</button>
+            <input id="search" type="text" placeholder="Enter the city name" autocomplete="off" />
+            <button id="search-btn">Submit</button>
         </div>
         <div class="notification">
             <div class="weather-container">
                 <div class="weather-icon"><img src=""></div>
                 <div class="temperature-value">
-                    <p>- °<span>F</span></p>
+                    <p>- °<span>C</span></p>
                 </div>
                 <div class="temperature-description">
                     <p> - </p>
@@ -31,5 +31,6 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </body>
 </html>

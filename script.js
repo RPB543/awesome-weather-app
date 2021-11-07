@@ -1,10 +1,13 @@
-const notification = document.querySelector(".notification");
-const iconEl = document.querySelector(".weather-container");
-const tempEl = document.querySelector(".temperature value p");
-const descripEl = document.querySelector(".temperature-description p");
-const locEl = document.querySelector(".location p");
+let lon;
+let lat;
+var input = document.querySelector(".search");
+var icon = document.querySelector(".weather-icon");
+var temp = document.querySelector(".temperature value p");
+var summary = document.querySelector(".temperature-description p");
+var loc = document.querySelector(".location p");
+var submitEl = document.querySelector("#search-btn");
+const kelvin = 273;
 
-const api = {
-    key: "bae57e4cda117c8b12b4f90bdd90b054",
-    base: "https://api.openweathermap.org/data/2.5/"
-}
+const key = "";
+const base = "https://api.openweathermap.org/data/2.5/";
+
