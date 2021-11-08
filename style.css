@@ -1,0 +1,15 @@
+* {
+    font-family: 'Roboto', 'Times New Roman', sans-serif;
+}
+
+header {
+    font-size: 35px;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+.search-title {
+    font-size: 35px;
+    font-weight: bold;
+    margin: 0;
+}
