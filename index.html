@@ -12,13 +12,18 @@
 <body>
     <header class="text-light">Weather Dashboard</header>
     <div class="row">
-        <div class="form d-grid col-2 gap-2">
+        <div class="form col-2">
             <p class="search-title">Search for a City:</p>
-            <input id="search" type="text" placeholder="Enter the city name" autocomplete="off" />
-            <button id="search-btn" class="btn text-light opacity-10">Submit</button>
+            <input id="search" class="my-2" type="text" placeholder="Enter the city name" autocomplete="off" />
+            <button id="search-btn" class="btn text-light d-grid ms-1" style="width:200px">Submit</button>
+            <button class="btn btn-secondary d-none"></button>
         </div>
-        <div class="weather-container col-10 mb-2" ></div>
-        <div class="weather-forecast row d-flex w-5 justify-content-end m-0"></div>
+        <div class="weather-boxes col-10">
+            <div class="weather-container mb-2" ></div>
+            <div class="weather-forecast row d-flex m-0">
+                <h3 class="forecast-title d-none font-weight-bold row ms-0 p-0">5 Day Forecast: </h3>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <script src="script.js"></script>

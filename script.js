@@ -28,7 +28,7 @@ function getCurrentForescast(coordsEl) {
     var weatherCard = $("<div>").addClass("card");
 
     //create elements to obtain necessary data
-    var cardTitle = $("<h3>").addClass("card-title").text(input.value + " (" + new Date(data.current.dt*1000).toLocaleDateString("en-US") + ")");
+    var cardTitle = $("<h2>").addClass("card-title").text(input.value + " (" + new Date(data.current.dt*1000).toLocaleDateString("en-US") + ")");
     var tempEl = $("<p>").addClass("card-text").text("Temp: " + data.current.temp + "°F");
     var imgEl = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.current.weather[0].icon + ".png");
     var windEl = $("<p>").addClass("card-text").text("Wind: " + data.current.wind_speed + " mph");
@@ -56,6 +56,7 @@ function getCurrentForescast(coordsEl) {
 
 // create function to pull 5 day forecast
 function getForecast(coordsEl) {
+  $(".forecast-title").removeClass("d-none");
 
 // create loop to get 5-day forecast
   for(let i=1; i <= 5; i++){
@@ -64,7 +65,7 @@ function getForecast(coordsEl) {
    
     response.json().then(function(forecast){
     // create card to hold each day's data
-    var dailyForecast = $("<div>").addClass("card col-2 card-deck forecast text-light").attr("style", "width=150px");
+    var dailyForecast = $("<div>").addClass("card col-2 forecast text-light me-5");
 
     // create elements for date, temp, icon, wind and humidity
     var cardTitle = $("<h4>").addClass("card-title").text(new Date(forecast.daily[i].dt*1000).toLocaleDateString("en-US"));
@@ -86,7 +87,18 @@ return getForecast;
 
 
 // create buttons from previous search
+var pastSearch = function(){
+ 
+  console.log(pastSearch)
 
+//   pastSearchEl = document.createElement("button");
+//   pastSearchEl.textContent = pastSearch;
+//   pastSearchEl.classList = "d-flex w-100 btn-light border p-2";
+//   pastSearchEl.setAttribute("data-city",pastSearch)
+//   pastSearchEl.setAttribute("type", "submit");
+
+//   pastSearchButtonEl.prepend(pastSearchEl);
+ }
 
 // get name of city from input
 submitEl.addEventListener("click", function(){

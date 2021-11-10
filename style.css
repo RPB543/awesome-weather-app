@@ -25,10 +25,13 @@ header {
 
 .success {
     background-color: lightgreen;
+    padding: 0 10px;
 }
 .danger {
     background-color: red;
+    padding: 0 10px;
 }
 .caution {
     background-color: yellow;
+    padding: 0 10px;
 }
