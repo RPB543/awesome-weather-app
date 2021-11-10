@@ -2,15 +2,10 @@ var input = document.querySelector("#search");
 var form = document.querySelector(".form");
 var submitEl = document.querySelector("#search-btn");
 
-
 const key = "bae57e4cda117c8b12b4f90bdd90b054";
 
-// get name of city from input
-submitEl.addEventListener("click", function(){
-  getLocation(input.value);
-});
 
-// research open weather API, endpoint and parameters
+// use weather API to get coordinates of entered city
 function getLocation(city) {
 fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + key + '&units=imperial')
   .then(function(response) {
@@ -38,20 +33,23 @@ function getCurrentForescast(coordsEl) {
     var imgEl = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.current.weather[0].icon + ".png");
     var windEl = $("<p>").addClass("card-text").text("Wind: " + data.current.wind_speed + " mph");
     var humidityEl = $("<p>").addClass("card-text").text("Humidity: " + data.current.humidity + " %");
-    var uvIndex = $("<p>").addClass("card-text").text("UV Index: " + data.current.uvi);
+    var index = $("<span>").text(data.current.uvi);
+    var uvIndexText = $("<p>").addClass("card-text").text("UV Index: ");
 
-    // created loop to change class based on UV value
-    if (data.current.uvi > '5') {
-      $(uvIndex).addClass("danger");
-    } if (data.current.uvi > '2' && data.current.uvi < '5'){
-      $(uvIndex).addClass("caution");    
+    // created loop to change class based on UV values
+    if (data.current.uvi > 5 ) {
+      $(index).addClass("danger");
+      $(index).removeClass("success");
+    } if (data.current.uvi > 2 && data.current.uvi < 5){
+      $(index).addClass("caution"); 
+      $(index).removeClass("success");  
     } else {
-      $(uvIndex).addClass("success");
+      $(index).addClass("success");
     }
 
-   //append elements to weather container
-   $(".weather-container").append(weatherCard.append(cardTitle.append(imgEl), tempEl, windEl, humidityEl, uvIndex))
-});
+   // append elements to weather container
+   $(".weather-container").append(weatherCard.append(cardTitle.append(imgEl), tempEl, windEl, humidityEl, uvIndexText.append(index)))
+  });
   })
  return getCurrentForescast;
   }
@@ -82,3 +80,16 @@ function getForecast(coordsEl) {
   };
 return getForecast;
 }
+
+
+// clear history from previous search 
+
+
+// create buttons from previous search
+
+
+// get name of city from input
+submitEl.addEventListener("click", function(){
+  getLocation(input.value);
+  localStorage.setItem("city", input.value);
+});
