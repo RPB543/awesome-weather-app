@@ -8,12 +8,19 @@ header {
     justify-content: center;
     padding: 10px;
     font-weight: bolder;
-    background-image: linear-gradient(90deg, #0F52BA, darkblue);
+    background-image: linear-gradient(90deg, #0070b8, midnightblue);
+    margin-bottom: 10px;
 }
 .search-title {
-    font-size: 35px;
+    font-size: 20px;
     font-weight: bold;
     margin: 0;
+}
+#search-btn {
+    background-color: #0070b8;
+}
+.forecast {
+    background-color: #0070b8;
 }
 
 .success {
