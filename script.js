@@ -7,39 +7,53 @@ const key = "bae57e4cda117c8b12b4f90bdd90b054";
 
 // get name of city from input
 submitEl.addEventListener("click", function(){
-  getWeather(input.value);
+  getLocation(input.value);
 });
 
 // research open weather API, endpoint and parameters
-function getWeather(city) {
+function getLocation(city) {
 fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + key + '&units=imperial')
   .then(function(response) {
     return response.json();
   })
   .then(function(data) {
-    console.log(data);
     var coordsEl = 'lat=' + data.coord.lat + '&lon=' + data.coord.lon;
     getForecast(coordsEl);
-    getUvIndex(coordsEl);
+    getCurrentForescast(coordsEl);
   });
-  input.textContent = input
 }
 
-function getUvIndex(coordsEl) {
+// create function to pull current forecast with the lat/lon of the entered city
+function getCurrentForescast(coordsEl) {
   fetch('https://api.openweathermap.org/data/2.5/onecall?' + coordsEl + '&exclude=hourly,minutely&appid=' + key + '&units=imperial')
   .then(function(response) {
     response.json().then(function(data){
+
+    // create div card to hold forecast
     var weatherCard = $("<div>").addClass("card");
+
+    //create elements to obtain necessary data
     var cardTitle = $("<h3>").addClass("card-title").text(input.value + " (" + new Date(data.current.dt*1000).toLocaleDateString("en-US") + ")");
     var tempEl = $("<p>").addClass("card-text").text("Temp: " + data.current.temp + "°F");
     var imgEl = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.current.weather[0].icon + ".png");
     var windEl = $("<p>").addClass("card-text").text("Wind: " + data.current.wind_speed + " mph");
     var humidityEl = $("<p>").addClass("card-text").text("Humidity: " + data.current.humidity + " %");
-   var uvIndex = $("<p>").addClass("card-text").text("UV Index: " + data.current.uvi);
+    var uvIndex = $("<p>").addClass("card-text").text("UV Index: " + data.current.uvi);
+
+    // created loop to change class based on UV value
+    if (data.current.uvi > '5') {
+      $(uvIndex).addClass("danger");
+    } if (data.current.uvi > '2' && data.current.uvi < '5'){
+      $(uvIndex).addClass("caution");    
+    } else {
+      $(uvIndex).addClass("success");
+    }
+
+   //append elements to weather container
    $(".weather-container").append(weatherCard.append(cardTitle.append(imgEl), tempEl, windEl, humidityEl, uvIndex))
 });
   })
- return getUvIndex;
+ return getCurrentForescast;
   }
 
 // create function to pull 5 day forecast
@@ -51,7 +65,6 @@ function getForecast(coordsEl) {
   .then(function(response) {
    
     response.json().then(function(forecast){
-      console.log(forecast)
     // create card to hold each day's data
     var dailyForecast = $("<div>").addClass("card col-2 w-5");
 
