@@ -1,9 +1,39 @@
 var input = document.querySelector("#search");
 var form = document.querySelector(".form");
 var submitEl = document.querySelector("#search-btn");
+let searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
+var city = "";
+var cities = [];
 
 const key = "bae57e4cda117c8b12b4f90bdd90b054";
 
+// get name of city from input and save to local storage
+submitEl.addEventListener("click", function(){
+  var city = input.value.trim();
+  if(city){
+      getLocation(city);
+      searchHistory.push(city);
+      localStorage.setItem("cities", JSON.stringify(searchHistory));
+      renderSearchHistory();
+  } else{
+      alert("Please enter a city");
+  }
+});
+
+function renderSearchHistory() {
+  for (let i = 0; i < searchHistory.length; i++) {
+      const historyItem = document.createElement("input");
+      historyItem.setAttribute("type", "text");
+      historyItem.setAttribute("readonly", true);
+      historyItem.setAttribute("class", "d-grid btn btn-secondary pt-2");
+      historyItem.setAttribute("style", "width: 200px")
+      historyItem.setAttribute("value", searchHistory[i]);
+      historyItem.addEventListener("click", function () {
+          getLocation(historyItem.value);
+      })
+      form.append(historyItem);
+  }
+}
 
 // use weather API to get coordinates of entered city
 function getLocation(city) {
@@ -13,13 +43,14 @@ fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + 
   })
   .then(function(data) {
     var coordsEl = 'lat=' + data.coord.lat + '&lon=' + data.coord.lon;
+    var cityName = data.name;
     getForecast(coordsEl);
-    getCurrentForescast(coordsEl);
+    getCurrentForescast(coordsEl, cityName);
   });
 }
 
 // create function to pull current forecast with the lat/lon of the entered city
-function getCurrentForescast(coordsEl) {
+function getCurrentForescast(coordsEl, cityName) {
   fetch('https://api.openweathermap.org/data/2.5/onecall?' + coordsEl + '&exclude=hourly,minutely&appid=' + key + '&units=imperial')
   .then(function(response) {
     response.json().then(function(data){
@@ -28,7 +59,7 @@ function getCurrentForescast(coordsEl) {
     var weatherCard = $("<div>").addClass("card");
 
     //create elements to obtain necessary data
-    var cardTitle = $("<h2>").addClass("card-title").text(input.value + " (" + new Date(data.current.dt*1000).toLocaleDateString("en-US") + ")");
+    var cardTitle = $("<h2>").addClass("card-title").text(cityName + " (" + new Date(data.current.dt*1000).toLocaleDateString("en-US") + ")");
     var tempEl = $("<p>").addClass("card-text").text("Temp: " + data.current.temp + "°F");
     var imgEl = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.current.weather[0].icon + ".png");
     var windEl = $("<p>").addClass("card-text").text("Wind: " + data.current.wind_speed + " mph");
@@ -37,12 +68,10 @@ function getCurrentForescast(coordsEl) {
     var uvIndexText = $("<p>").addClass("card-text").text("UV Index: ");
 
     // created loop to change class based on UV values
-    if (data.current.uvi > 5 ) {
+    if (data.current.uvi > 8 ) {
       $(index).addClass("danger");
-      $(index).removeClass("success");
-    } if (data.current.uvi > 2 && data.current.uvi < 5){
+    } if (data.current.uvi > 2 && data.current.uvi < 8){
       $(index).addClass("caution"); 
-      $(index).removeClass("success");  
     } else {
       $(index).addClass("success");
     }
@@ -83,25 +112,6 @@ return getForecast;
 }
 
 
-// clear history from previous search 
-
-
 // create buttons from previous search
-var pastSearch = function(){
- 
-  console.log(pastSearch)
 
-//   pastSearchEl = document.createElement("button");
-//   pastSearchEl.textContent = pastSearch;
-//   pastSearchEl.classList = "d-flex w-100 btn-light border p-2";
-//   pastSearchEl.setAttribute("data-city",pastSearch)
-//   pastSearchEl.setAttribute("type", "submit");
 
-//   pastSearchButtonEl.prepend(pastSearchEl);
- }
-
-// get name of city from input
-submitEl.addEventListener("click", function(){
-  getLocation(input.value);
-  localStorage.setItem("city", input.value);
-});
