@@ -1,8 +1,11 @@
 var input = document.querySelector("#search");
 var form = document.querySelector(".form");
 var submitEl = document.querySelector("#search-btn");
-let searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
+var searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
+var weatherBoxes = document.querySelector(".weather-boxes");
+var clearEl = document.querySelector("#clear-history");
 var city = "";
+var historyItem = "";
 var cities = [];
 
 const key = "bae57e4cda117c8b12b4f90bdd90b054";
@@ -20,23 +23,26 @@ submitEl.addEventListener("click", function(){
   }
 });
 
+// generate history buttons below the search bar
 function renderSearchHistory() {
-  for (let i = 0; i < searchHistory.length; i++) {
-      const historyItem = document.createElement("input");
+  for (let i = 0; i < searchHistory.length - 1; i++) {
+      historyItem = document.createElement("input");
       historyItem.setAttribute("type", "text");
       historyItem.setAttribute("readonly", true);
-      historyItem.setAttribute("class", "d-grid btn btn-secondary pt-2");
+      historyItem.setAttribute("class", "d-grid btn btn-secondary pt-2 my-2");
       historyItem.setAttribute("style", "width: 200px")
       historyItem.setAttribute("value", searchHistory[i]);
       historyItem.addEventListener("click", function () {
           getLocation(historyItem.value);
       })
+     $(clearEl).removeClass("d-none"); 
       form.append(historyItem);
   }
 }
 
 // use weather API to get coordinates of entered city
 function getLocation(city) {
+
 fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + key + '&units=imperial')
   .then(function(response) {
     return response.json();
@@ -111,7 +117,10 @@ function getForecast(coordsEl) {
 return getForecast;
 }
 
-
-// create buttons from previous search
-
-
+// Clear History button from local storage
+clearEl.addEventListener("click", function () {
+  localStorage.clear();
+  $(historyItem).addClass("d-none");
+  searchHistory = [];
+  renderSearchHistory;
+})
