@@ -23,6 +23,7 @@ header {
     background-color: #0070b8;
 }
 
+/* formatting for UV index */ 
 .success {
     background-color: lightgreen;
     padding: 0 10px;

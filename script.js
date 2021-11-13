@@ -11,7 +11,7 @@ var cities = [];
 
 const key = "bae57e4cda117c8b12b4f90bdd90b054";
 
-// use weather API to get coordinates of entered city
+// use openweather API to get coordinates of entered city
 function getLocation(city) {
 
 fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + key + '&units=imperial')
@@ -137,13 +137,11 @@ function renderSearchHistory() {
 }
 
 
-// Clear History button from local storage
+// Clear History button from local storage and history buttons
 clearEl.addEventListener("click", function () {
   localStorage.clear();
   searchHistory = [];
   $(clearEl).addClass("d-none");
-  $(weatherBoxes).innerHTML = "";
-  $(input).attr("placeholder", "Enter the city name");
   renderSearchHistory();
 })
 
