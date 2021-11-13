@@ -11,40 +11,6 @@ var cities = [];
 
 const key = "bae57e4cda117c8b12b4f90bdd90b054";
 
-// get name of city from input and save to local storage
-submitEl.addEventListener("click", function(){
-  var city = input.value.trim();
-  if(city){
-      getLocation(city);
-      searchHistory.push(city);
-      localStorage.setItem("cities", JSON.stringify(searchHistory));
-      renderSearchHistory();
-  } else{
-      alert("Please enter a city");
-  }
-});
-
-// generate history buttons below the search bar
-function renderSearchHistory() {
-  
-  //clear buttons each time page reloads/localstorage is cleared
-  historyBtns.innerHTML = "";
-
-  for (let i = 0; i < searchHistory.length - 1; i++) {
-      var historyItem = document.createElement("input");
-      historyItem.setAttribute("type", "text");
-      historyItem.setAttribute("readonly", true);
-      historyItem.setAttribute("class", "d-grid btn btn-secondary pt-2 my-2");
-      historyItem.setAttribute("style", "width: 200px")
-      historyItem.setAttribute("value", searchHistory[i]);
-      historyItem.addEventListener("click", function () {
-          getLocation(historyItem.value);
-      })
-     $(clearEl).removeClass("d-none"); 
-      historyBtns.append(historyItem);
-  }
-}
-
 // use weather API to get coordinates of entered city
 function getLocation(city) {
 
@@ -62,10 +28,13 @@ fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + 
 
 // create function to pull current forecast with the lat/lon of the entered city
 function getCurrentForescast(coordsEl, cityName) {
+  var currentForecast = document.querySelector(".weather-container");
 
   fetch('https://api.openweathermap.org/data/2.5/onecall?' + coordsEl + '&exclude=hourly,minutely&appid=' + key + '&units=imperial')
   .then(function(response) {
     response.json().then(function(data){
+
+    currentForecast.innerHTML = "";
 
     // create div card to hold forecast
     var weatherCard = $("<div>").addClass("card");
@@ -97,16 +66,24 @@ function getCurrentForescast(coordsEl, cityName) {
 
 // create function to pull 5 day forecast
 function getForecast(coordsEl) {
-  $(".forecast-title").removeClass("d-none");
+
+// remove class to show 5 day forecase title
+$(".forecast-title").removeClass("d-none");
+
+var weatherForecastEl = document.querySelector(".weather-forecast");
 
 // create loop to get 5-day forecast
   for(let i=1; i <= 5; i++){
+
+    //clearing old city forecast
+    weatherForecastEl.innerHTML = "";
+
   fetch('https://api.openweathermap.org/data/2.5/onecall?' + coordsEl + '&exclude=hourly,minutely&appid=' + key + '&units=imperial')
   .then(function(response) {
    
     response.json().then(function(forecast){
     // create card to hold each day's data
-    var dailyForecast = $("<div>").addClass("card col-2 forecast text-light me-5");
+    var dailyForecast = $("<div>").addClass("card col-2 forecast text-light me-5 rounded");
 
     // create elements for date, temp, icon, wind and humidity
     var cardTitle = $("<h4>").addClass("card-title").text(new Date(forecast.daily[i].dt*1000).toLocaleDateString("en-US"));
@@ -116,18 +93,57 @@ function getForecast(coordsEl) {
     var humidityEl = $("<p>").addClass("card-text").text("Humidity: " + forecast.daily[i].humidity + " %");
   
     //append the elements to the forecast container
-    $(".weather-forecast").append(dailyForecast.append(cardTitle.append(imgEl), tempEl, windEl, humidityEl));
+    $(weatherForecastEl).append(dailyForecast.append(cardTitle.append(imgEl), tempEl, windEl, humidityEl));
          });
     });
   };
 return getForecast;
 }
 
+// get name of city from input and save to local storage
+submitEl.addEventListener("click", function(){
+  var city = input.value.trim();
+  if(city){
+      getLocation(city);
+      searchHistory.push(city);
+      localStorage.setItem("cities", JSON.stringify(searchHistory));
+      renderSearchHistory();
+  } else{
+      alert("Please enter a city");
+  }
+});
+
+// generate history buttons below the search bar
+function renderSearchHistory() {
+  
+  //clear buttons each time page reloads/localstorage is cleared
+  historyBtns.innerHTML = "";
+
+  for (let i = 0; i < searchHistory.length; i++) {
+      var historyItem = document.createElement("input");
+      historyItem.setAttribute("type", "text");
+      historyItem.setAttribute("readonly", true);
+      historyItem.setAttribute("class", "d-grid btn btn-secondary pt-2 my-2");
+      historyItem.setAttribute("style", "width: 200px")
+      historyItem.setAttribute("value", searchHistory[i]);
+      historyItem.addEventListener("click", function () {
+          getLocation(searchHistory[i]);
+          console.log(searchHistory[i]);
+      })
+     $(clearEl).removeClass("d-none"); 
+      
+     historyBtns.append(historyItem);
+  }
+}
+
+
 // Clear History button from local storage
 clearEl.addEventListener("click", function () {
   localStorage.clear();
-  $(historyItem).addClass("d-none");
   searchHistory = [];
+  $(clearEl).addClass("d-none");
+  $(weatherBoxes).innerHTML = "";
+  $(input).attr("placeholder", "Enter the city name");
   renderSearchHistory();
-  getLocation();
 })
+
