@@ -2,6 +2,7 @@ var input = document.querySelector("#search");
 var form = document.querySelector(".form");
 var submitEl = document.querySelector("#search-btn");
 var searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
+var historyBtns = document.querySelector("#history");
 var weatherBoxes = document.querySelector(".weather-boxes");
 var clearEl = document.querySelector("#clear-history");
 var city = "";
@@ -25,6 +26,10 @@ submitEl.addEventListener("click", function(){
 
 // generate history buttons below the search bar
 function renderSearchHistory() {
+  
+  //clear buttons each time page reloads/localstorage is cleared
+  historyBtns.innerHTML = "";
+
   for (let i = 0; i < searchHistory.length - 1; i++) {
       var historyItem = document.createElement("input");
       historyItem.setAttribute("type", "text");
@@ -36,7 +41,7 @@ function renderSearchHistory() {
           getLocation(historyItem.value);
       })
      $(clearEl).removeClass("d-none"); 
-      form.append(historyItem);
+      historyBtns.append(historyItem);
   }
 }
 
@@ -57,6 +62,7 @@ fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + 
 
 // create function to pull current forecast with the lat/lon of the entered city
 function getCurrentForescast(coordsEl, cityName) {
+
   fetch('https://api.openweathermap.org/data/2.5/onecall?' + coordsEl + '&exclude=hourly,minutely&appid=' + key + '&units=imperial')
   .then(function(response) {
     response.json().then(function(data){
@@ -122,5 +128,6 @@ clearEl.addEventListener("click", function () {
   localStorage.clear();
   $(historyItem).addClass("d-none");
   searchHistory = [];
-  renderSearchHistory;
+  renderSearchHistory();
+  getLocation();
 })
