@@ -26,7 +26,7 @@ submitEl.addEventListener("click", function(){
 // generate history buttons below the search bar
 function renderSearchHistory() {
   for (let i = 0; i < searchHistory.length - 1; i++) {
-      historyItem = document.createElement("input");
+      var historyItem = document.createElement("input");
       historyItem.setAttribute("type", "text");
       historyItem.setAttribute("readonly", true);
       historyItem.setAttribute("class", "d-grid btn btn-secondary pt-2 my-2");
