@@ -23,7 +23,7 @@
 * Google fonts
 * OpenWeather APIs
 
-### Links
+#### Links
 :star: [Deployed Website](https://rpb543.github.io/awesome-weather-app/)\
 :boom: [Link to Repo](https://github.com/RPB543/awesome-weather-app)\
 :dizzy: [GitHub](https://github.com/RPB543)

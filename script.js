@@ -83,7 +83,7 @@ var weatherForecastEl = document.querySelector(".weather-forecast");
    
     response.json().then(function(forecast){
     // create card to hold each day's data
-    var dailyForecast = $("<div>").addClass("card col-2 forecast text-light me-5 rounded");
+    var dailyForecast = $("<div>").addClass("card col-2 forecast text-light me-4 rounded");
 
     // create elements for date, temp, icon, wind and humidity
     var cardTitle = $("<h4>").addClass("card-title").text(new Date(forecast.daily[i].dt*1000).toLocaleDateString("en-US"));
